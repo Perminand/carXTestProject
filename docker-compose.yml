@@ -1,15 +1,23 @@
 services:
-  insider-db:
+  postgres-db:
     image: postgres:16.1
-    container_name: insiderDb
+    container_name: postgresDb
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=insider
-      - POSTGRES_USER=insider
-      - POSTGRES_PASSWORD=insider
+      - POSTGRES_DB=game
+      - POSTGRES_USER=game
+      - POSTGRES_PASSWORD=game
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
       interval: 5s
       retries: 10
+
+  redis:
+    image: redis
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redisdata:/data

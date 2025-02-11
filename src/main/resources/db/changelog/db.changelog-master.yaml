@@ -5,6 +5,6 @@ databaseChangeLog:
       changes:
         - sqlFile:
             dbms: postgresql
-            path: changes/V002_create-user_credentials-table.sql
+            path: changes/V001_create-user_credentials-table.sql
             relativeToChangelogFile: true
             remark: "create user_credentials"
