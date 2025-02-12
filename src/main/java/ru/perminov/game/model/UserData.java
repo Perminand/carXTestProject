@@ -14,7 +14,7 @@ public class UserData {
     @Id
     private UUID id;
 
-    private Long money;
+    private Integer money;
 
     private String country;
 

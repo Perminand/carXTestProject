@@ -1,7 +1,7 @@
 package ru.perminov.game.service;
 
-import ru.perminov.game.dto.UserDto;
+import ru.perminov.game.dto.UserDataDto;
 
 public interface UserService {
-    void create(UserDto userDto);
+    void create(UserDataDto userDataDto);
 }
