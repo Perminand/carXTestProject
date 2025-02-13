@@ -1,3 +1,6 @@
+server:
+  undertow:
+    max-http-post-size: 10KB
 spring:
   redis:
     host: localhost

@@ -1,14 +1,19 @@
 package ru.perminov.game.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.util.UUID;
 
-
+@Builder
 @Getter
+@Setter
 @RedisHash("users")
+@ToString
 public class UserData {
 
     @Id

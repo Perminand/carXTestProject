@@ -43,9 +43,6 @@ public class UserCredential {
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false)
-    private String userId;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
