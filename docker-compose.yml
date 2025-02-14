@@ -24,7 +24,7 @@ services:
 
   game-service:
     build: /
-    container_name: user-service
+    container_name: game-service
     ports:
       - "8080:8080"
     depends_on:
@@ -36,3 +36,4 @@ services:
       - SPRING_DATASOURCE_PASSWORD=game
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
+      - SPRING_CACHE_TYPE=redis

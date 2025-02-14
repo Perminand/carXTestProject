@@ -9,7 +9,6 @@ public interface UserActivityStatDataMapper {
 
     UserActivityStatDto toUserDto(UserActivityData userSyncData);
 
-    UserActivityData toEntity(UserActivityStatDto userActivityStatDto);
 
 
 }

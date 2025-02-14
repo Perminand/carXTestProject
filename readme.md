@@ -82,5 +82,82 @@
 <h2>Заключение</h2>
 <p>Проект "Синхронизация и накопление игровой статистики" предоставляет мощный инструмент для обработки и хранения данных пользователей в новой игре. Он обеспечивает высокую производительность и надежность при работе с большим количеством пользователей и данных, что позволяет эффективно управлять пользовательскими данными и игровой статистикой.</p>
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Развертывание и проверка Docker-решения</title>
+</head>
+<body>
+
+<h2>Шаги для развертывания</h2>
+
+<h3>1. Подготовка Docker-состава</h3>
+<ol>
+    <li>Убедитесь, что у вас установлен Docker и Docker Compose. Если нет, установите их согласно документации Docker(<a href="https://docs.docker.com/get-docker/" target="_blank">https://docs.docker.com/get-docker/</a>).</li>
+</ol>
+
+<h3>2. Клонирование репозитория (если необходимо)</h3>
+<ol>
+    <li>Если ваш проект находится в репозитории, клонируйте его:
+        <pre><code>git clone https://github.com/Perminand/carXTestProject.git;
+cd carXTestProject</code></pre>
+    </li>
+</ol>
+
+<h3>3. Запуск Docker Compose</h3>
+<ol>
+    <li>Откройте терминал в директории, где находится ваш <code>docker-compose.yml</code>, и выполните команду для запуска сервисов:
+        <pre><code>docker-compose up -d</code></pre>
+        Эта команда запустит все сервисы в фоновом режиме.
+    </li>
+</ol>
+
+<h3>4. Проверка состояния контейнеров</h3>
+<ol>
+    <li>Проверьте состояние запущенных контейнеров:
+        <pre><code>docker-compose ps</code></pre>
+        Убедитесь, что все контейнеры (<code>postgresDb</code>, <code>redis_container</code>, <code>user-service</code>) находятся в состоянии <code>Up</code>.</li>
+</ol>
+
+<h3>5. Проверка здоровья сервисов</h3>
+<ol>
+    <li>Для проверки здоровья PostgreSQL:
+        <pre><code>docker inspect -f "{{json.State.Health }}" postgresDb</code></pre>
+        Убедитесь, что статус здоровья (<code>Status</code>) показывает <code>healthy</code>.</li>
+    <li>Для проверки Redis, можно подключиться к контейнеру и выполнить команду <code>PING</code>:
+        <pre><code>docker exec -it redis_container redis-cli
+PING</code></pre>
+        Если возвращается <code>PONG</code>, Redis работает корректно.</li>
+</ol>
+
+<h3>6. Проверка работы вашего приложения</h3>
+<ol>
+    <li>Откройте веб-браузер и перейдите по адресу <code>http://localhost:8080</code>, чтобы убедиться, что ваше приложение доступно и работает корректно.</li>
+</ol>
+
+<h2>Проверка развертывания</h2>
+
+<ol>
+    <li><strong>Проверка доступности сервисов:</strong>
+        <ul>
+            <li>Убедитесь, что PostgreSQL, Redis и ваше приложение доступны и работают без ошибок.</li>
+        </ul>
+    </li>
+    <li><strong>Мониторинг логов:</strong>
+        <ul>
+            <li>Осмотрите логи контейнеров для выявления возможных ошибок или проблем:
+                <pre><code>docker-compose logs -f</code></pre>
+            </li>
+        </ul>
+    </li>
+    <li><strong>Тестирование функциональности:</strong>
+        <ul>
+            <li>Проведите тестирование основных функций вашего приложения, чтобы убедиться, что все зависимости работают корректно.</li>
+        </ul>
+    </li>
+</ol>
+
 </body>
 </html>

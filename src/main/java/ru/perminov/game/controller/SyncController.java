@@ -27,14 +27,14 @@ public class SyncController {
 
     @PostMapping("/{uuid}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createSyncData(@PathVariable UUID uuid, @Valid @RequestBody UserSyncDataDtoIn userDataDto) {
+    public void createSyncData(@PathVariable String uuid, @Valid @RequestBody UserSyncDataDtoIn userDataDto) {
         log.info("POST request uuid: {}, data: {}", uuid, userDataDto);
-        syncService.createSynh(uuid, userDataDto);
+        syncService.createSynh(UUID.fromString(uuid), userDataDto);
     }
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public UserSyncDataDto getData(@PathVariable UUID uuid) {
+    public UserSyncDataDto getData(@PathVariable String uuid) {
         log.info("Get request uuid: {}", uuid);
         return syncService.getData(uuid);
     }

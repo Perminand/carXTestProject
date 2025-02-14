@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -21,27 +22,26 @@ import java.util.UUID;
 public class UserActivityData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
-
-    private LocalDateTime createActivity;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true)
-    private UUID userCredential;
+    private UUID userUuid;
+
+    private LocalDateTime createActivity;
 
     @Column(nullable = false)
     private Long activity;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserActivityData that = (UserActivityData) o;
-        return uuid != null && uuid.equals(that.uuid);
+        return Objects.equals(userUuid, that.userUuid) && Objects.equals(createActivity, that.createActivity) && Objects.equals(activity, that.activity);
     }
 
     @Override
     public int hashCode() {
-        return getUuid() != null ? getUuid().hashCode() : 0;
+        return Objects.hash(userUuid, createActivity, activity);
     }
 }

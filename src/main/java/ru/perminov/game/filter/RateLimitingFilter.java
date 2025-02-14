@@ -6,14 +6,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-@Component
+//@Component
 public class RateLimitingFilter implements Filter {
     private final ConcurrentMap<String, RequestInfo> userRequests = new ConcurrentHashMap<>();
 

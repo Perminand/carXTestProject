@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface ActivityService {
 
     @Transactional
-    UserActivityDataDto createActivity(UUID uuid, UserActivityDataDto userActivityDataDto);
+    UserActivityDataDto createActivity(UUID uuid, Long activity);
 
 
 }

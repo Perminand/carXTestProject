@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,10 +17,13 @@ import java.util.UUID;
 @Setter
 @RedisHash("users")
 @ToString
-public class UserSyncData {
+public class UserSyncData implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
-    private UUID id;
+    private UUID uuid;
 
     private Integer money;
 

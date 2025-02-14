@@ -10,11 +10,11 @@ import java.util.UUID;
 @Builder
 public record UserActivityDataDto(
 
-        UUID uuid,
+        Long id,
+
+        UUID userUuid,
 
         LocalDateTime createActivity,
-
-        UUID userCredential,
 
         @NotNull(message = "The field must not be null")
         @Positive(message = "The data must not be less than 0")
