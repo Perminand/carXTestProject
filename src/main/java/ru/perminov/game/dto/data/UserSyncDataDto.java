@@ -7,7 +7,7 @@ import lombok.Builder;
 
 @Builder
 
-public record UserDataDto(
+public record UserSyncDataDto(
 
         @Positive(message = "The data must not be less than 0")
         Integer money,

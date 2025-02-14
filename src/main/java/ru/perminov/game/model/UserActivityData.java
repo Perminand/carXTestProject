@@ -18,7 +18,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
-public class UserActivity {
+public class UserActivityData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,7 +36,7 @@ public class UserActivity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserActivity that = (UserActivity) o;
+        UserActivityData that = (UserActivityData) o;
         return uuid != null && uuid.equals(that.uuid);
     }
 

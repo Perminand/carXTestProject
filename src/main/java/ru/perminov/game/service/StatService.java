@@ -1,13 +1,17 @@
 package ru.perminov.game.service;
 
-import ru.perminov.game.model.UserData;
+import ru.perminov.game.dto.statistic.UserActivityStatDto;
+import ru.perminov.game.model.UserSyncData;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public interface StatService {
-    Map<String, List<UserData>> getMoneyData();
+    Map<String, Long> countNewUsersByCountry(LocalDate start, LocalDate end);
 
-    Map<String, Long> countNewUsersByCountry(LocalDateTime start, LocalDateTime end);
+    List<UserActivityStatDto> findActivityByUserAndPeriod(UUID userCredential, LocalDate start, LocalDate end);
+
+    List<UserSyncData> getTopUsersByCountry(String country, int count);
 }

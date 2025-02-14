@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.perminov.game.dto.statistic.UserActivityStatDto;
-import ru.perminov.game.model.UserData;
+import ru.perminov.game.mapper.UserActivityStatDataMapper;
+import ru.perminov.game.model.UserSyncData;
 import ru.perminov.game.repository.UserActivityRepository;
-import ru.perminov.game.repository.UserRepository;
+import ru.perminov.game.repository.UserSyncRepository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,25 +21,39 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StatServiceImpl implements StatService {
 
-    private final UserRepository userRepository;
+    private final UserSyncRepository userSyncRepository;
     private final UserActivityRepository userActivityRepository;
+    private final UserActivityStatDataMapper userActivityStatDataMapper;
+
 
     @Override
-    public Map<String, List<UserData>> getMoneyData() {
-        List<UserData> userDataList = new ArrayList<>(userRepository.findAll());
-        userDataList.sort(Comparator.comparing(UserData::getMoney));
-
-        return userDataList
-                .stream()
-                .collect(Collectors.groupingBy(UserData::getCountry));
+    public Map<String, Long> countNewUsersByCountry(LocalDate start, LocalDate end) {
+        List<UUID> listUuid = userActivityRepository.findUserIdsWithActivityInPeriod(start, end);
+        List<UserSyncData> users = userSyncRepository.findAllByIdIn(listUuid);
+        return users.stream()
+                .collect(Collectors.groupingBy(UserSyncData::getCountry, Collectors.counting()));
     }
 
     @Override
-    public Map<String, Long> countNewUsersByCountry(LocalDateTime start, LocalDateTime end) {
-        return userActivityRepository.countNewUsersByCountry(start, end);
+    public List<UserActivityStatDto> findActivityByUserAndPeriod(UUID userCredential, LocalDate start, LocalDate end) {
+        return userActivityRepository.findActivityByUserAndPeriod(userCredential, start, end).stream()
+                .map(userActivityStatDataMapper::toUserDto).toList();
     }
 
-    public List<Map<String, UserActivityStatDto>> getActivityForUser(UUID userCredential, LocalDateTime start, LocalDateTime end) {
-        return userActivityRepository.findActivityByUserCredentialAndPeriod(userCredential, start, end);
+    @Override
+    public List<UserSyncData> getTopUsersByCountry(String country, int count) {
+        Iterable<UserSyncData> allUsers = userSyncRepository.findAll();
+        List<UserSyncData> usersInCountry = new ArrayList<>();
+
+        for (UserSyncData user : allUsers) {
+            if (country.equals(user.getCountry())) {
+                usersInCountry.add(user);
+            }
+        }
+
+        usersInCountry.sort((u1, u2) -> u2.getMoney().compareTo(u1.getMoney()));
+
+        return usersInCountry.stream().limit(count).collect(Collectors.toList());
     }
 }
+

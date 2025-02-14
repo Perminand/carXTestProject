@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record UserDataDtoIn(
+public record UserSyncDataDtoIn(
 
         @Positive(message = "The data must not be less than 0")
         Integer money,

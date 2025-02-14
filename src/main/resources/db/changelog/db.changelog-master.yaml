@@ -1,19 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-user_credentials-table
-      author: aperminov
-      changes:
-        - sqlFile:
-            dbms: postgresql
-            path: changes/V001_create-user_credentials-table.sql
-            relativeToChangelogFile: true
-            remark: "create user_credentials"
-  - changeSet:
       id: create-user_activity-table
       author: aperminov
       changes:
         - sqlFile:
             dbms: postgresql
-            path: changes/V002_create-user_activity-table.sql
+            path: changes/V001_create-user_activity-table.sql
             relativeToChangelogFile: true
             remark: "create-user_activity-table"

@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Builder
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Setter
 @RedisHash("users")
 @ToString
-public class UserData {
+public class UserSyncData {
 
     @Id
     private UUID id;
@@ -25,15 +26,13 @@ public class UserData {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserData userData = (UserData) o;
-        return id != null && id.equals(userData.id);
+        UserSyncData that = (UserSyncData) o;
+        return Objects.equals(money, that.money) && Objects.equals(country, that.country);
     }
 
     @Override
     public int hashCode() {
-        return getId() != null ? getId().hashCode() : 0;
+        return Objects.hash(money, country);
     }
-
 }

@@ -1,33 +1,21 @@
 package ru.perminov.game.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.perminov.game.dto.statistic.UserActivityStatDto;
-import ru.perminov.game.model.UserData;
+import ru.perminov.game.model.UserSyncData;
 import ru.perminov.game.service.StatService;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,14 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class StatControllerTest {
 
-    ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new JavaTimeModule())
-            .build();
-    List<UserData> userDataList;
-    UserData userData1 = UserData.builder().id(UUID.randomUUID()).money(1000).country("RU").build();
-    UserData userData2 = UserData.builder().id(UUID.randomUUID()).money(500).country("EN").build();
-    UserData userData3 = UserData.builder().id(UUID.randomUUID()).money(2000).country("RU").build();
-    UserData userData4 = UserData.builder().id(UUID.randomUUID()).money(200).country("EN").build();
+    UserSyncData userSyncData1 = UserSyncData.builder().id(UUID.randomUUID()).money(1000).country("RU").build();
+    UserSyncData userSyncData2 = UserSyncData.builder().id(UUID.randomUUID()).money(500).country("EN").build();
+    UserSyncData userSyncData3 = UserSyncData.builder().id(UUID.randomUUID()).money(2000).country("RU").build();
+    UserSyncData userSyncData4 = UserSyncData.builder().id(UUID.randomUUID()).money(200).country("EN").build();
 
     @Mock
     private StatService statService;
@@ -57,51 +41,66 @@ class StatControllerTest {
     }
 
     @Test
-    void testGetUserMoneyOk() throws Exception {
-        userDataList = List.of(userData1, userData2, userData3, userData4);
-        Map<String, List<UserData>> expectedData = new HashMap<>(userDataList
-                .stream()
-                .collect(Collectors.groupingBy(UserData::getCountry)));
+    public void testGetTopUsersByCountry() throws Exception {
+        // Given
+        String country = "USA";
+        int count = 10;
+        List<UserSyncData> expectedUsers = Arrays.asList(userSyncData1, userSyncData2, userSyncData3, userSyncData4);
 
-        when(statService.getMoneyData()).thenReturn(expectedData);
-        Map<String, List<UserData>> result = statController.getUserMoney();
-        assertEquals(expectedData, result);
-        verify(statService).getMoneyData();
+        when(statService.getTopUsersByCountry(country, count)).thenReturn(expectedUsers);
 
-        mvc.perform(get("/stat/money")
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+        // When
+        mvc.perform(get("/stat/top/{country}/{count}", country, count)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-    }
 
-
-    @Test
-    void getNewUser() throws Exception {
-        Mockito.when(statService.countNewUsersByCountry(any(LocalDateTime.class), any(LocalDateTime.class)))
-                .thenReturn(Map.of("RU", 1000L));
-
-        mvc.perform(get("/stat/new-user")
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .param("start", LocalDateTime.now().minusMonths(1).toString())
-                        .param("end", LocalDateTime.now().toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        // Then
+        verify(statService).getTopUsersByCountry(country, count);
     }
 
     @Test
-    void getActivityForUser() throws Exception {
-        Map<String, UserActivityStatDto> userActivitiList = Map.of(UUID.randomUUID().toString(), UserActivityStatDto.builder().activity(1000L).createActivity(LocalDateTime.now()).build());
-        Mockito.when(statService.getActivityForUser(any(UUID.class), any(LocalDateTime.class), any(LocalDateTime.class)))
-                .thenReturn(Collections.singletonList(userActivitiList));
+    public void testGetTopUsersByCountry_ServiceReturnsEmpty() throws Exception {
+        // Given
+        String country = "USA";
+        int count = 10;
+        List<UserSyncData> expectedUsers = List.of();
 
-        mvc.perform(get("/stat/" + UUID.randomUUID() + "/activity")
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .param("start", LocalDateTime.now().minusMonths(1).toString())
-                        .param("end", LocalDateTime.now().toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+        when(statService.getTopUsersByCountry(country, count)).thenReturn(expectedUsers);
+
+        // When
+        mvc.perform(get("/stat/top/{country}/{count}", country, count)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        // Then
+        verify(statService).getTopUsersByCountry(country, count);
+    }
+
+    @Test
+    public void testGetTopUsersByCountry_InvalidCountry() throws Exception {
+        // Given
+        String country = "InvalidCountry";
+        int count = 10;
+
+
+        // When
+        mvc.perform(get("/stat/top/{country}/{count}", country, count)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    public void testGetTopUsersByCountry_InvalidCount() throws Exception {
+        // Given
+        String country = "Invalid";
+        int count = -10;
+
+
+        // When
+        mvc.perform(get("/stat/top/{country}/{count}", country, count)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+
     }
 }
