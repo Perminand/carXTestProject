@@ -23,10 +23,10 @@ services:
       - ./redisdata:/data
 
   game-service:
-    build: /
+    build: /server
     container_name: game-service
     ports:
-      - "8080:8080"
+      - "9090:9090"
     depends_on:
       - postgres-db
       - redis
@@ -37,3 +37,14 @@ services:
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
       - SPRING_CACHE_TYPE=redis
+
+  gateway:
+    build: /gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-db
+      - redis
+    environment:
+      - GAME-SERVER_URL=http://game-service:9090
