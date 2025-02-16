@@ -9,6 +9,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/Evreka/pom.xml" />
         <option value="$PROJECT_DIR$/server/game-server/pom.xml" />
         <option value="$PROJECT_DIR$/server/game-servir/pom.xml" />
       </set>
