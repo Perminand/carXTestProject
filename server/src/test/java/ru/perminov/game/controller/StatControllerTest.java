@@ -49,7 +49,7 @@ class StatControllerTest {
 
         when(statService.getTopUsersByCountry(country, count)).thenReturn(expectedUsers);
 
-        mvc.perform(get("/stat/top/{country}/{count}", country, count)
+        mvc.perform(get("/api/v1/stat/top/{country}/{count}", country, count)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -64,7 +64,7 @@ class StatControllerTest {
 
         when(statService.getTopUsersByCountry(country, count)).thenReturn(expectedUsers);
 
-        mvc.perform(get("/stat/top/{country}/{count}", country, count)
+        mvc.perform(get("/api/v1/stat/top/{country}/{count}", country, count)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

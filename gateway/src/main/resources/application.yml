@@ -7,5 +7,6 @@ logging:
             RestTemplate: DEBUG
 server:
   port: 8080
-game-server:
-  url: http://localhost:9090
+game:
+  server:
+    url: http://localhost:9090

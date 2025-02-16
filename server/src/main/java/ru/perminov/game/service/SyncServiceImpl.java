@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import ru.perminov.game.dto.data.UserSyncDataDto;
 import ru.perminov.game.dto.data.UserSyncDataDtoIn;
 import ru.perminov.game.exception.error.EntityNotFoundException;
 import ru.perminov.game.exception.error.ValidationException;
@@ -24,8 +25,8 @@ import java.util.UUID;
 public class SyncServiceImpl implements SyncService {
 
     private final UserSyncRepository userSyncRepository;
-    private final UserSyncDataMapper userSyncDataMapper;
 
+    private final UserSyncDataMapper userSyncDataMapper;
 
     @Override
     @CachePut(value = "SynhData", key = "#result.uuid")
@@ -41,9 +42,10 @@ public class SyncServiceImpl implements SyncService {
     }
 
     @Override
-    public UserSyncData getData(String uuid) {
-        return userSyncRepository.findById(uuid).orElseThrow(
+    public UserSyncDataDto getData(String uuid) {
+        UserSyncData userSyncData = userSyncRepository.findById(uuid).orElseThrow(
                 () -> new EntityNotFoundException("no uuid for request"));
+        return userSyncDataMapper.toUserDto(userSyncData);
     }
 
 }

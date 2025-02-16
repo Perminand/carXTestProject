@@ -63,7 +63,7 @@ class StatControllerTest {
         when(statClient.getTopUsersByCountry(anyString(), anyInt()))
                 .thenReturn(ResponseEntity.badRequest().build());
 
-        mockMvc.perform(get("/stat/top/{country}/{count}", country, count)
+        mockMvc.perform(get("/api/v1/stat/top/{country}/{count}", country, count)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -73,7 +73,7 @@ class StatControllerTest {
         String country = "CountryA";
         int count = -1;
 
-        mockMvc.perform(get("/stat/top/{country}/{count}", country, count)
+        mockMvc.perform(get("/api/v1/stat/top/{country}/{count}", country, count)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }

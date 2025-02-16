@@ -16,13 +16,13 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/data")
+@RequestMapping("/api/v1/users")
 public class ActivityController {
 
     private final ActivityService activityService;
 
 
-    @PostMapping("/activity/{uuid}/{activity}")
+    @PostMapping("/{uuid}/activity/{activity}")
     @ResponseStatus(HttpStatus.OK)
     public UserActivityDataDto createActivityData(@PathVariable String uuid, @PathVariable Long activity) {
         log.info("PATCH request uuid: {}, activity: {}", uuid, activity);

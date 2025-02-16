@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/sync")
+@RequestMapping("/api/v1/sync")
 @RequiredArgsConstructor
 public class SyncController {
 

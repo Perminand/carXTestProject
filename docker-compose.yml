@@ -14,9 +14,12 @@ services:
       interval: 5s
       retries: 10
 
-  redis:
+  redis-db:
     image: redis
     container_name: redis_container
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - "6379:6379"
     volumes:
@@ -29,22 +32,22 @@ services:
       - "9090:9090"
     depends_on:
       - postgres-db
-      - redis
+      - redis-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/game
       - SPRING_DATASOURCE_USERNAME=game
       - SPRING_DATASOURCE_PASSWORD=game
-      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_HOST=http://redis-db
       - SPRING_REDIS_PORT=6379
       - SPRING_CACHE_TYPE=redis
 
-  gateway:
+  game-gateway:
     build: /gateway
-    container_name: gateway
+    container_name: game-gateway
     ports:
       - "8080:8080"
     depends_on:
       - postgres-db
-      - redis
+      - redis-db
     environment:
-      - GAME-SERVER_URL=http://game-service:9090
+      - GAME_SERVER_URL=http://game-service:9090

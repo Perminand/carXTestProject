@@ -10,5 +10,4 @@ public interface ActivityService {
     @Transactional
     UserActivityDataDto createActivity(UUID uuid, Long activity);
 
-
 }

@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/stat")
+@RequestMapping("/api/v1/stat")
 @RequiredArgsConstructor
 public class StatController {
 

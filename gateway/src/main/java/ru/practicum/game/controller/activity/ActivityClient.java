@@ -1,4 +1,4 @@
-package ru.practicum.game.controller;
+package ru.practicum.game.controller.activity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +13,10 @@ import java.util.UUID;
 
 @Service
 public class ActivityClient extends BaseClient {
-    private static final String API_PREFIX = "/data";
+    private static final String API_PREFIX = "/api/v1/users";
 
     @Autowired
-    public ActivityClient(@Value("${game-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public ActivityClient(@Value("${game.server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
@@ -26,6 +26,6 @@ public class ActivityClient extends BaseClient {
 
 
     public ResponseEntity<Object> createActivity(UUID uuid, Long activity) {
-        return post("/activity/" + uuid + "/" + activity, null);
+        return post("/" + uuid + "/activity/" + activity, null);
     }
 }

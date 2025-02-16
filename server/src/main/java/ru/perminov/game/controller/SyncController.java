@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.perminov.game.dto.data.UserSyncDataDto;
 import ru.perminov.game.dto.data.UserSyncDataDtoIn;
-import ru.perminov.game.model.UserSyncData;
 import ru.perminov.game.service.SyncService;
 
 import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/sync")
+@RequestMapping("/api/v1/sync")
 @RequiredArgsConstructor
 public class SyncController {
 
@@ -33,7 +33,7 @@ public class SyncController {
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public UserSyncData getData(@PathVariable String uuid) {
+    public UserSyncDataDto getData(@PathVariable String uuid) {
         log.info("Get request uuid: {}", uuid);
         return syncService.getData(uuid);
     }

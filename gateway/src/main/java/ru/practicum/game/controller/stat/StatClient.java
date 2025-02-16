@@ -14,10 +14,10 @@ import java.util.UUID;
 
 @Service
 public class StatClient extends BaseClient {
-    private static final String API_PREFIX = "/stat";
+    private static final String API_PREFIX = "/api/v1/stat";
 
     @Autowired
-    public StatClient(@Value("${game-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatClient(@Value("${game.server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))

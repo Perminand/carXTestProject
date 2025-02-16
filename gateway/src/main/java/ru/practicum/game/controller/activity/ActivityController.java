@@ -1,4 +1,4 @@
-package ru.practicum.game.controller;
+package ru.practicum.game.controller.activity;
 
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,12 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/data")
+@RequestMapping("/api/v1/users")
 public class ActivityController {
 
     private final ActivityClient activityClient;
 
-    @PostMapping("/activity/{uuid}/{activity}")
+    @PostMapping("/{uuid}/activity/{activity}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> createActivityData(@PathVariable String uuid, @PathVariable @Positive Long activity) {
         log.info("PATCH request uuid: {}, activity: {}", uuid, activity);

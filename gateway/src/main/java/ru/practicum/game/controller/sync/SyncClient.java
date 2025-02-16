@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Service
 public class SyncClient extends BaseClient {
-    private static final String API_PREFIX = "/sync";
+    private static final String API_PREFIX = "/api/v1/sync";
 
     @Autowired
-    public SyncClient(@Value("${game-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public SyncClient(@Value("${game.server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
