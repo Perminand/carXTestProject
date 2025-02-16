@@ -13,6 +13,8 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+    networks:
+      - game-network
 
   redis-db:
     image: redis
@@ -24,6 +26,8 @@ services:
       - "6379:6379"
     volumes:
       - ./redisdata:/data
+    networks:
+      - game-network
 
   game-service:
     build: /server
@@ -40,6 +44,8 @@ services:
       - SPRING_REDIS_HOST=http://redis-db
       - SPRING_REDIS_PORT=6379
       - SPRING_CACHE_TYPE=redis
+    networks:
+      - game-network
 
   game-gateway:
     build: /gateway
@@ -51,3 +57,8 @@ services:
       - redis-db
     environment:
       - GAME_SERVER_URL=http://game-service:9090
+    networks:
+      - game-network
+
+networks:
+  game-network:

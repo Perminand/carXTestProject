@@ -3,8 +3,6 @@ package ru.perminov.game.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ru.perminov.game.dto.data.UserSyncDataDto;
 import ru.perminov.game.dto.data.UserSyncDataDtoIn;
@@ -21,7 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Cacheable("SynhData")
+//@Cacheable("SynhData")
 public class SyncServiceImpl implements SyncService {
 
     private final UserSyncRepository userSyncRepository;
@@ -29,7 +27,7 @@ public class SyncServiceImpl implements SyncService {
     private final UserSyncDataMapper userSyncDataMapper;
 
     @Override
-    @CachePut(value = "SynhData", key = "#result.uuid")
+//    @CachePut(value = "SynhData", key = "#result.uuid")
     public void createSynh(UUID uuid, UserSyncDataDtoIn userDataDto) {
         UserSyncData userSyncData = userSyncRepository.findById(uuid.toString())
                 .orElse(UserSyncData.builder().id(uuid).money(userDataDto.money()).country(userDataDto.country()).build());
