@@ -1,12 +1,12 @@
-package ru.perminov.game;
+package ru.practicum.game;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class Game {
+public class GameGateWayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Game.class, args);
+        SpringApplication.run(GameGateWayApplication.class, args);
     }
+
 }

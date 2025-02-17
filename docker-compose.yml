@@ -5,9 +5,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=game
-      - POSTGRES_USER=game
-      - POSTGRES_PASSWORD=game
+      POSTGRES_DB: game
+      POSTGRES_USER: game
+      POSTGRES_PASSWORD: game
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
@@ -17,33 +17,33 @@ services:
       - game-network
 
   redis-db:
-    image: redis
-    container_name: redis_container
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    image: redis:latest
+    container_name: redis-db
     ports:
       - "6379:6379"
+    command: redis-server --bind 0.0.0.0
     volumes:
-      - ./redisdata:/data
+      - redis-data:/data
     networks:
       - game-network
 
   game-service:
     build: /server
     container_name: game-service
+    links:
+      - redis-db
     ports:
       - "9090:9090"
     depends_on:
       - postgres-db
       - redis-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/game
-      - SPRING_DATASOURCE_USERNAME=game
-      - SPRING_DATASOURCE_PASSWORD=game
-      - SPRING_REDIS_HOST=http://redis-db
-      - SPRING_REDIS_PORT=6379
-      - SPRING_CACHE_TYPE=redis
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/game
+      SPRING_DATASOURCE_USERNAME: game
+      SPRING_DATASOURCE_PASSWORD: game
+      SPRING_DATA_REDIS_HOST: redis-db
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_CACHE_TYPE: redis
     networks:
       - game-network
 
@@ -52,13 +52,13 @@ services:
     container_name: game-gateway
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres-db
-      - redis-db
     environment:
-      - GAME_SERVER_URL=http://game-service:9090
+      GAME_SERVER_URL: http://game-service:9090
     networks:
       - game-network
 
 networks:
   game-network:
+
+volumes:
+  redis-data:
