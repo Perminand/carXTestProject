@@ -296,6 +296,5 @@ PING</code></pre>
         <td>200 OK</td>
     </tr>
 </table>
-
 </body>
 </html>

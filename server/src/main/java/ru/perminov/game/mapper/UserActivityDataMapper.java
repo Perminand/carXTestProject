@@ -7,6 +7,5 @@ import ru.perminov.game.model.UserActivityData;
 @Mapper(componentModel = "spring")
 public interface UserActivityDataMapper {
 
-
     UserActivityDataDto toDto(UserActivityData userActivityData);
 }

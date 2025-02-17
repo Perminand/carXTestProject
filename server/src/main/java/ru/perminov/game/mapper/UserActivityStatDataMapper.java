@@ -9,5 +9,4 @@ public interface UserActivityStatDataMapper {
 
     UserActivityStatDto toUserDto(UserActivityData userSyncData);
 
-
 }
