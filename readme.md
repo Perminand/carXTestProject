@@ -118,7 +118,7 @@ cd carXTestProject</code></pre>
 <ol>
     <li>Проверьте состояние запущенных контейнеров:
         <pre><code>docker-compose ps</code></pre>
-        Убедитесь, что все контейнеры (<code>postgresDb</code>, <code>redis_container</code>, <code>user-service</code>) находятся в состоянии <code>Up</code>.</li>
+        Убедитесь, что все контейнеры (<code>postgres-db</code>, <code>redis-db</code>, <code>game-gateway</code>, <code>game-service</code>) находятся в состоянии <code>Up</code>.</li>
 </ol>
 
 <h3>5. Проверка здоровья сервисов</h3>
@@ -132,10 +132,7 @@ PING</code></pre>
         Если возвращается <code>PONG</code>, Redis работает корректно.</li>
 </ol>
 
-<h3>6. Проверка работы вашего приложения</h3>
-<ol>
-    <li>Откройте веб-браузер и перейдите по адресу <code>http://localhost:8080</code>, чтобы убедиться, что ваше приложение доступно и работает корректно.</li>
-</ol>
+
 
 <h2>Проверка развертывания</h2>
 
@@ -158,6 +155,147 @@ PING</code></pre>
         </ul>
     </li>
 </ol>
+
+<h1>Документация API</h1>
+
+<h2>1. createActivityData</h2>
+<p><strong>Метод:</strong> PATCH</p>
+<p><strong>Путь:</strong> /api/v1/users/{uuid}/activity/{activity}</p>
+<p><strong>Описание:</strong> Этот метод используется для создания новой активности пользователя с уникальным идентификатором (UUID). В запросе передаются UUID пользователя и идентификатор активности (<code>activity</code>), а также создается объект <code>UserActivityDataDto</code>, который возвращается клиенту.</p>
+<table>
+    <tr>
+        <th>Параметры пути</th>
+        <td>
+            <ul>
+                <li><code>uuid</code>: Уникальный идентификатор пользователя (UUID).</li>
+                <li><code>activity</code>: Идентификатор активности.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Возвращаемое значение</th>
+        <td>Объект типа <code>UserActivityDataDto</code>.</td>
+    </tr>
+    <tr>
+        <th>Статус-код ответа</th>
+        <td>200 OK</td>
+    </tr>
+</table>
+
+<h2>2. getTopUsersByCountry</h2>
+<p><strong>Метод:</strong> GET</p>
+<p><strong>Путь:</strong> /api/v1/stat/top/{country}/{count}</p>
+<p><strong>Описание:</strong> Метод возвращает список пользователей, отсортированных по количеству синхронизаций данных за определенный период времени. В запросе передается страна и количество пользователей, которые необходимо вернуть.</p>
+<table>
+    <tr>
+        <th>Параметры пути</th>
+        <td>
+            <ul>
+                <li><code>country</code>: Страна, для которой требуется получить данные.</li>
+                <li><code>count</code>: Количество пользователей, которое должно быть возвращено.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Возвращаемое значение</th>
+        <td>Список объектов типа <code>UserSyncData</code>.</td>
+    </tr>
+    <tr>
+        <th>Статус-код ответа</th>
+        <td>200 OK</td>
+    </tr>
+</table>
+
+<h2>3. getNewUser</h2>
+<p><strong>Метод:</strong> GET</p>
+<p><strong>Путь:</strong> /api/v1/stat/new-user/{start}/{end}</p>
+<p><strong>Описание:</strong> Возвращает статистику новых пользователей за указанный временной интервал. Запрос принимает начальную и конечную даты в формате ISO.</p>
+<table>
+    <tr>
+        <th>Параметры пути</th>
+        <td>
+            <ul>
+                <li><code>start</code>: Начальная дата периода.</li>
+                <li><code>end</code>: Конечная дата периода.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Возвращаемое значение</th>
+        <td>Карта, где ключ — это имя страны, а значение — количество новых пользователей в этой стране за данный период.</td>
+    </tr>
+    <tr>
+        <th>Статус-код ответа</th>
+        <td>200 OK</td>
+    </tr>
+</table>
+
+<h2>4. findActivityByUserCredentialAndPeriod</h2>
+<p><strong>Метод:</strong> GET</p>
+<p><strong>Путь:</strong> /api/v1/users/activity/{userCredential}/{start}/{end}</p>
+<p><strong>Описание:</strong> Получение статистики активности пользователя за заданный период времени. В запросе передаются идентификатор пользователя, начальная и конечная даты.</p>
+<table>
+    <tr>
+        <th>Параметры пути</th>
+        <td>
+            <ul>
+                <li><code>userCredential</code>: Идентификатор пользователя.</li>
+                <li><code>start</code>: Начальная дата периода.</li>
+                <li><code>end</code>: Конечная дата периода.</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Возвращаемое значение</th>
+        <td>Список объектов типа <code>UserActivityStatDto</code>, содержащих информацию об активности пользователя за указанный период.</td>
+    </tr>
+    <tr>
+        <th>Статус-код ответа</th>
+        <td>200 OK</td>
+    </tr>
+</table>
+
+<h2>5. createSyncData</h2>
+<p><strong>Метод:</strong> POST</p>
+<p><strong>Путь:</strong> /api/v1/sync/{uuid}</p>
+<p><strong>Описание:</strong> Создает новую запись о синхронизации данных для указанного пользователя. В теле запроса передается объект <code>UserSyncDataDtoIn</code>, содержащий данные синхронизации.</p>
+<table>
+    <tr>
+        <th>Параметр пути</th>
+        <td><code>uuid</code>: Уникальный идентификатор пользователя (UUID).</td>
+    </tr>
+    <tr>
+        <th>Тело запроса</th>
+        <td>Объект типа <code>UserSyncDataDtoIn</code>.</td>
+    </tr>
+    <tr>
+        <th>Возвращаемое значение</th>
+        <td>Нет.</td>
+    </tr>
+    <tr>
+        <th>Статус-код ответа</th>
+        <td>201 Created</td>
+    </tr>
+</table>
+
+<h2>6. getData</h2>
+<p><strong>Метод:</strong> GET</p>
+<p><strong>Путь:</strong> /api/v1/sync/{uuid}</p>
+<p><strong>Описание:</strong> Возвращает данные синхронизации для указанного пользователя.</p>
+<table>
+    <tr>
+        <th>Параметр пути</th>
+        <td><code>uuid</code>: Уникальный идентификатор пользователя (UUID).</td>
+    </tr>
+    <tr>
+        <th>Возвращаемое значение</th>
+        <td>Объект типа <code>UserSyncDataDto</code>, содержащий данные синхронизации.</td>
+    </tr>
+    <tr>
+        <th>Статус-код ответа</th>
+        <td>200 OK</td>
+    </tr>
+</table>
 
 </body>
 </html>

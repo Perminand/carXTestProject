@@ -230,7 +230,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"money\": \"1000\",\r\n  \"country\" : \"RU\"\r\n}",
+              "raw": "{\r\n  \"money\": \"1005\",\r\n  \"country\" : \"RU\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
