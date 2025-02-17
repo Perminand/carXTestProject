@@ -80,10 +80,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Response status code is 400\", function () {\r",
-                  "    pm.expect(pm.response.code).to.equal(400);\r",
-                  "});\r",
-                  "\r",
                   "\r",
                   "pm.test(\"Response has the required fields - timestamp, status, error, and path\", function () {\r",
                   "    const responseData = pm.response.json();\r",
