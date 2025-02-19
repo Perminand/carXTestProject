@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Описание проекта "Синхронизация и накопление игровой статистики"</title>
 </head>
 <body>
 
@@ -87,7 +86,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Развертывание и проверка Docker-решения</title>
 </head>
 <body>
 
@@ -100,8 +98,8 @@
 
 <h3>2. Клонирование репозитория (если необходимо)</h3>
 <ol>
-    <li>Если ваш проект находится в репозитории, клонируйте его:
-        <pre><code>git clone https://github.com/Perminand/carXTestProject.git;
+    <li>Если ваш проект находится в репозитории, клонируйте его Предварительно скачав GIT:
+        <pre><code>apt-get install git; git clone https://github.com/Perminand/carXTestProject.git;
 cd carXTestProject</code></pre>
     </li>
 </ol>
