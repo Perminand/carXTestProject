@@ -127,7 +127,7 @@ cd carXTestProject</code></pre>
         <pre><code>docker inspect -f "{{json.State.Health }}" postgresDb</code></pre>
         Убедитесь, что статус здоровья (<code>Status</code>) показывает <code>healthy</code>.</li>
     <li>Для проверки Redis, можно подключиться к контейнеру и выполнить команду <code>PING</code>:
-        <pre><code>docker exec -it redis_container redis-cli
+        <pre><code>docker exec -it redis_db
 PING</code></pre>
         Если возвращается <code>PONG</code>, Redis работает корректно.</li>
 </ol>
@@ -159,7 +159,7 @@ PING</code></pre>
 <h1>Документация API</h1>
 
 <h2>1. createActivityData</h2>
-<p><strong>Метод:</strong> PATCH</p>
+<p><strong>Метод:</strong> POST </p>
 <p><strong>Путь:</strong> /api/v1/users/{uuid}/activity/{activity}</p>
 <p><strong>Описание:</strong> Этот метод используется для создания новой активности пользователя с уникальным идентификатором (UUID). В запросе передаются UUID пользователя и идентификатор активности (<code>activity</code>), а также создается объект <code>UserActivityDataDto</code>, который возвращается клиенту.</p>
 <table>
